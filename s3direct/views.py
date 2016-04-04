@@ -45,7 +45,11 @@ def get_upload_params(request):
         return HttpResponse(data, content_type="application/json", status=400)
 
     if hasattr(key, '__call__'):
-        key = key(filename)
+        try:
+            key = key(filename)
+        except ValueError, ve:
+            data = json.dumps({'error': 'Filename Invalid. %s' % ve})
+            return HttpResponse(data, content_type="application/json", status=400)
     else:
         # The literal string '${filename}' is an S3 field variable for key.
         # https://aws.amazon.com/articles/1434#aws-table
