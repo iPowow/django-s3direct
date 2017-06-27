@@ -46,7 +46,7 @@ def get_upload_params(request):
     if hasattr(key, '__call__'):
         try:
             key = key(filename)
-        except ValueError, ve:
+        except ValueError as ve:
             data = json.dumps({'error': 'Filename Invalid. %s' % ve})
             return HttpResponse(data, content_type="application/json", status=400)
     elif key == '/':
